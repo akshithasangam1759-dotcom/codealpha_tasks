@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import axios from 'axios';
 import type { User, AuthState, LoginData, RegisterData } from '../types';
-axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 interface AuthContextType extends AuthState {
   login: (data: LoginData) => Promise<void>;
