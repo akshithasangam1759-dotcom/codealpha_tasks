@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://buzzbee-u8zx.onrender.com/api/:path*"
+    }
+  ]
+}

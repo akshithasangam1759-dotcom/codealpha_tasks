@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuzzBee 🐝 — Music Social Platform</title>
+  <meta name="description" content="BuzzBee — The social platform for music lovers. Share vibes, discover artists, connect with creators.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐝</text></svg>">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+
+<!-- Cursor Glow -->
+<div class="cursor-glow" id="cursor-glow"></div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ============================================
+     SPLASH SCREEN
+     ============================================ -->
+<div id="splash-screen">
+  <div class="music-particles"></div>
+  <div class="splash-logo">
+    <span class="splash-bee">🐝</span>
+    <span class="splash-title">BuzzBee</span>
+  </div>
+  <div class="splash-tagline">Where Music Meets Culture</div>
+  <div class="splash-loader">
+    <div class="splash-loader-bar"></div>
+  </div>
+</div>
+
+<!-- ============================================
+     AUTH PAGE
+     ============================================ -->
+<div id="auth-page" style="display:none">
+  <div class="auth-visual">
+    <div class="auth-visual-bg"></div>
+    <div class="music-particles auth-particles"></div>
+    <div class="auth-brand">
+      <div class="auth-brand-logo">
+        <span>🐝</span>
+        <span class="auth-brand-name">BuzzBee</span>
+      </div>
+      <div class="auth-tagline">Where Music Meets Culture 🎵</div>
+      <div class="auth-features">
+        <div class="auth-feature"><div class="auth-feature-icon">🎵</div>Discover trending music globally</div>
+        <div class="auth-feature"><div class="auth-feature-icon">🎤</div>Connect with artists & creators</div>
+        <div class="auth-feature"><div class="auth-feature-icon">🔥</div>Share your musical vibes</div>
+        <div class="auth-feature"><div class="auth-feature-icon">🤖</div>AI-powered music recommendations</div>
+        <div class="auth-feature"><div class="auth-feature-icon">💬</div>Real-time messaging & stories</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-form-container">
+      <div class="auth-form-header">
+        <div class="auth-form-title">Welcome to BuzzBee 🐝</div>
+        <div class="auth-form-subtitle">Your music social universe awaits</div>
+      </div>
+
+      <div class="auth-tabs">
+        <div class="auth-tab active" data-tab="login">Sign In</div>
+        <div class="auth-tab" data-tab="register">Join Now</div>
+      </div>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Email or Username</label>
+          <div class="form-input-wrapper">
+            <input type="text" id="login-email" class="form-input" placeholder="your@email.com or @username" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="form-input-wrapper" style="display:flex;align-items:center">
+            <input type="password" id="login-password" class="form-input" placeholder="Your password" required style="padding-right:44px">
+            <button type="button" class="password-toggle" style="margin-left:-36px;position:relative;z-index:1">👁️</button>
+          </div>
+        </div>
+        <div class="auth-forgot"><a href="#" onclick="openForgotModal();return false">Forgot password?</a></div>
+        <button type="submit" class="btn btn-primary">Sign In 🎵</button>
+        <div class="auth-switch">Don't have an account? <a href="#" onclick="document.querySelector('[data-tab=register]').click()">Join BuzzBee</a></div>
+      </form>
+
+      <!-- Register Form -->
+      <form class="auth-form hidden" id="register-form" onsubmit="handleRegister(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Username *</label>
+            <input type="text" id="reg-username" class="form-input" placeholder="@yourusername" required minlength="3" maxlength="20">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Display Name</label>
+            <input type="text" id="reg-displayname" class="form-input" placeholder="Your Name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input type="email" id="reg-email" class="form-input" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password *</label>
+          <div style="display:flex;align-items:center">
+            <input type="password" id="reg-password" class="form-input" placeholder="Min 6 characters" required minlength="6" style="padding-right:44px">
+            <button type="button" class="password-toggle" style="margin-left:-36px;position:relative;z-index:1">👁️</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">I am a...</label>
+          <div class="role-select-grid">
+            <div><input type="radio" name="role" id="role-listener" value="listener" class="role-option" checked><label for="role-listener" class="role-label"><span class="role-icon">🎧</span>Listener</label></div>
+            <div><input type="radio" name="role" id="role-artist" value="artist" class="role-option"><label for="role-artist" class="role-label"><span class="role-icon">🎤</span>Artist</label></div>
+            <div><input type="radio" name="role" id="role-producer" value="producer" class="role-option"><label for="role-producer" class="role-label"><span class="role-icon">🎛️</span>Producer</label></div>
+            <div><input type="radio" name="role" id="role-songwriter" value="songwriter" class="role-option"><label for="role-songwriter" class="role-label"><span class="role-icon">✍️</span>Songwriter</label></div>
+            <div><input type="radio" name="role" id="role-creator" value="creator" class="role-option"><label for="role-creator" class="role-label"><span class="role-icon">🌟</span>Creator</label></div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Account 🐝</button>
+        <div class="auth-switch">Already have an account? <a href="#" onclick="document.querySelector('[data-tab=login]').click()">Sign In</a></div>
+      </form>
+    </div>
+  </div>
+  <!-- Forgot Password Modal -->
+<div id="forgot-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center">
+  <div style="background:#1a1a2e;border:1px solid rgba(245,197,24,0.2);border-radius:20px;padding:32px;width:100%;max-width:420px;margin:16px">
+    <div style="font-size:22px;font-weight:800;margin-bottom:6px">Reset Password 🔑</div>
+    <div style="font-size:13px;color:#888;margin-bottom:24px">Enter your email and we'll send a reset code</div>
+ 
+    <!-- Step 1: Enter email -->
+    <div id="fp-step1">
+      <div style="margin-bottom:16px">
+        <label style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#888;display:block;margin-bottom:8px">Email</label>
+        <input id="fp-email" type="email" placeholder="your@email.com"
+          style="width:100%;padding:12px 16px;background:#111;border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-size:14px;box-sizing:border-box;outline:none"
+          onfocus="this.style.borderColor='#F5C518'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+      </div>
+      <button onclick="sendResetCode()"
+        style="width:100%;padding:14px;background:#F5C518;color:#0A0A0B;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:12px">
+        Send Reset Code
+      </button>
+    </div>
+ 
+    <!-- Step 2: Enter code + new password -->
+    <div id="fp-step2" style="display:none">
+      <div style="margin-bottom:16px">
+        <label style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#888;display:block;margin-bottom:8px">Reset Code</label>
+        <input id="fp-code" type="text" placeholder="6-digit code"
+          style="width:100%;padding:12px 16px;background:#111;border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-size:18px;letter-spacing:6px;text-align:center;box-sizing:border-box;outline:none"
+          onfocus="this.style.borderColor='#F5C518'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" maxlength="6">
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#888;display:block;margin-bottom:8px">New Password</label>
+        <input id="fp-newpass" type="password" placeholder="Min 6 characters"
+          style="width:100%;padding:12px 16px;background:#111;border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-size:14px;box-sizing:border-box;outline:none"
+          onfocus="this.style.borderColor='#F5C518'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+      </div>
+      <button onclick="confirmReset()"
+        style="width:100%;padding:14px;background:#F5C518;color:#0A0A0B;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:12px">
+        Reset Password
+      </button>
+      <div style="text-align:center">
+        <span onclick="sendResetCode()" style="font-size:12px;color:#F5C518;cursor:pointer">Resend code</span>
+      </div>
+    </div>
+ 
+    <!-- Step 3: Success -->
+    <div id="fp-step3" style="display:none;text-align:center;padding:16px 0">
+      <div style="font-size:48px;margin-bottom:12px">🎉</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px">Password Reset!</div>
+      <div style="font-size:13px;color:#888;margin-bottom:20px">You can now sign in with your new password</div>
+      <button onclick="closeForgotModal()"
+        style="padding:12px 32px;background:#F5C518;color:#0A0A0B;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer">
+        Sign In
+      </button>
+    </div>
+ 
+    <div id="fp-error" style="display:none;color:#FF6B6B;font-size:13px;text-align:center;margin-top:8px"></div>
+    <div style="text-align:center;margin-top:12px">
+      <span onclick="closeForgotModal()" style="font-size:13px;color:#888;cursor:pointer">← Back to Sign In</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================
+     MAIN APP
+     ============================================ -->
+<div id="app">
+  <div class="app-layout">
+
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeMobileSidebar()"></div>
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <span class="sidebar-logo-bee">🐝</span>
+        <span class="sidebar-logo-text">BuzzBee</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Discover</div>
+        <div class="nav-item active" data-page="home" onclick="navigateTo('home')">
+          <span class="nav-icon">🏠</span> Home
+          <span class="nav-indicator"></span>
+        </div>
+        <div class="nav-item" data-page="explore" onclick="navigateTo('explore')">
+          <span class="nav-icon">🔍</span> Explore
+        </div>
+        <div class="nav-item" data-page="music" onclick="navigateTo('music')">
+          <span class="nav-icon">🎵</span> Music
+        </div>
+        <div class="nav-item" data-page="stories" onclick="navigateTo('stories')">
+          <span class="nav-icon">✨</span> Stories
+        </div>
+
+        <div class="nav-section-label">Connect</div>
+        <div class="nav-item" data-page="messages" onclick="navigateTo('messages')">
+          <span class="nav-icon">💬</span> Messages
+          <span class="nav-badge" id="msg-badge"></span>
+        </div>
+        <div class="nav-item" data-page="notifications" onclick="navigateTo('notifications')">
+          <span class="nav-icon">🔔</span> Notifications
+          <span class="nav-badge" id="nav-notif-badge"></span>
+        </div>
+
+        <div class="nav-section-label">Create</div>
+        <div class="nav-item" onclick="openCreatePostModal()">
+          <span class="nav-icon">➕</span> Create Post
+        </div>
+        <div class="nav-item" data-page="avatar" onclick="navigateTo('avatar')">
+          <span class="nav-icon">🎨</span> Avatar Studio
+        </div>
+        <div class="nav-item" onclick="toggleVibeyChat()">
+          <span class="nav-icon">🤖</span> Vibey AI
+        </div>
+
+        <div class="nav-section-label">You</div>
+        <div class="nav-item" data-page="profile" onclick="navigateTo('profile', {username: currentUser?.username})">
+          <span class="nav-icon">👤</span> Profile
+        </div>
+        <div class="nav-item" data-page="settings" onclick="navigateTo('settings')">
+          <span class="nav-icon">⚙️</span> Settings
+        </div>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-user" onclick="navigateTo('profile', {username: currentUser?.username})">
+          <img src="" class="sidebar-user-avatar" id="sidebar-user-avatar" alt="You" onerror="this.src='https://ui-avatars.com/api/?name=U&background=F5C518&color=0A0A0B'">
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="sidebar-username">Loading...</div>
+            <div class="sidebar-user-role" id="sidebar-role">listener</div>
+          </div>
+          <div class="sidebar-user-actions">
+            <button class="sidebar-action-btn" id="theme-toggle" onclick="event.stopPropagation();toggleTheme()" title="Toggle theme">☀️</button>
+            <button class="sidebar-action-btn" onclick="event.stopPropagation();handleLogout()" title="Logout">🚪</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="main-content" id="main-content">
+
+      <!-- Top Bar -->
+      <header class="topbar">
+        <button class="hamburger" onclick="openMobileSidebar()">☰</button>
+
+        <div class="topbar-search">
+          <span class="topbar-search-icon">🔍</span>
+          <input type="text" class="topbar-search-input" placeholder="Search users, artists..." oninput="debouncedSearch(this.value)" onfocus="this.nextElementSibling && this.nextElementSibling.classList.add('show')">
+          <div class="search-results-dropdown" id="search-dropdown"></div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="topbar-btn" onclick="openCreatePostModal()" title="Create Post">➕</button>
+
+          <div class="notif-btn-wrap" style="position:relative">
+            <button class="topbar-btn" onclick="loadNotifDropdown()" title="Notifications">
+              🔔
+              <span class="topbar-notif-badge" id="topbar-notif-badge"></span>
+            </button>
+            <div class="notif-dropdown" id="notif-dropdown">
+              <div class="notif-dropdown-header">
+                <span class="notif-dropdown-title">Notifications</span>
+                <span class="notif-mark-all" onclick="api.put('/notifications/read');updateNotifBadge(0);document.getElementById('notif-dropdown').classList.remove('show')">Mark all read</span>
+              </div>
+              <div class="notif-dropdown-list"></div>
+            </div>
+          </div>
+
+          <button class="theme-toggle" id="topbar-theme-toggle" onclick="toggleTheme()" title="Toggle theme">☀️</button>
+        </div>
+      </header>
+
+      <!-- ============================================================
+           PAGES
+           ============================================================ -->
+
+      <!-- HOME PAGE -->
+      <div class="page active" id="page-home">
+        <div class="feed-layout">
+          <div class="feed-column">
+            <!-- Stories -->
+            <div class="stories-container">
+              <div class="section-header" style="margin-bottom:12px">
+                <div style="font-size:14px;font-weight:700">Stories</div>
+              </div>
+              <div class="stories-scroll" id="stories-scroll">
+                <div class="story-avatar">
+                  <div class="story-add-btn" onclick="openCreateStoryModal()">+</div>
+                  <div class="story-username">Your Story</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Create Post -->
+            <div class="create-post-card">
+              <div class="create-post-top">
+                <img src="" class="create-post-avatar" id="create-post-avatar" alt="You" onerror="this.src='https://ui-avatars.com/api/?name=U&background=F5C518&color=0A0A0B'">
+                <button class="create-post-input" onclick="openCreatePostModal()">What's buzzing today? 🐝</button>
+              </div>
+              <div class="create-post-actions">
+                <div class="create-post-action" onclick="openCreatePostModal()">📸 Photo</div>
+                <div class="create-post-action" onclick="openCreatePostModal()">🎵 Music</div>
+                <div class="create-post-action" onclick="openCreatePostModal()">✨ Mood</div>
+                <div class="create-post-action" onclick="openCreateStoryModal()">📖 Story</div>
+              </div>
+            </div>
+
+            <!-- Feed Posts -->
+            <div id="feed-posts"></div>
+          </div>
+
+          <!-- Right Sidebar -->
+          <aside class="right-sidebar">
+            <div class="widget">
+              <div class="widget-title">Suggested for You <span class="widget-more" onclick="navigateTo('explore')">See all</span></div>
+              <div id="suggested-users-list"></div>
+            </div>
+
+            <div class="widget">
+              <div class="widget-title">🔥 Trending Music</div>
+              <div id="trending-music-widget"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- EXPLORE PAGE -->
+      <div class="page" id="page-explore">
+        <div class="section-header">
+          <h1 class="page-title" style="margin:0">Explore 🔍</h1>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost btn-sm" onclick="loadExplorePosts('all')">All</button>
+            <button class="btn btn-ghost btn-sm" onclick="loadExplorePosts('music')">🎵 Music</button>
+            <button class="btn btn-ghost btn-sm" onclick="loadExplorePosts('image')">📸 Images</button>
+          </div>
+        </div>
+
+        <!-- Trending Users -->
+        <div class="section-header" style="margin-bottom:12px">
+          <div class="section-title" style="font-size:18px">🌟 Trending Creators</div>
+        </div>
+        <div id="trending-users-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:32px"></div>
+
+        <!-- Posts Grid -->
+        <div class="section-header" style="margin-bottom:12px">
+          <div class="section-title" style="font-size:18px">📸 Explore Posts</div>
+        </div>
+        <div class="explore-grid" id="explore-posts-grid"></div>
+      </div>
+
+      <!-- MUSIC PAGE -->
+      <div class="page" id="page-music">
+        <div class="music-hero">
+          <div class="music-hero-content">
+            <h1 class="music-hero-title">Discover Music 🎵</h1>
+            <p class="music-hero-sub">Explore trending tracks, artists, and genres from around the world</p>
+            <div class="music-search-bar">
+              <input type="text" class="music-search-input" placeholder="Search tracks, artists..." id="music-search-input" oninput="debounce(searchMusic, 500)(this.value)">
+              <button class="btn btn-primary btn-sm" onclick="searchMusic(document.getElementById('music-search-input').value)">Search</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Genres -->
+        <div class="section-header">
+          <div class="section-title">🎸 Genres</div>
+        </div>
+        <div class="genres-grid" id="genres-grid"></div>
+
+        <!-- Trending Tracks -->
+        <div class="section-header">
+          <div class="section-title">🔥 Trending Now</div>
+          <div class="section-action" onclick="loadTrendingTracks(true)">Refresh</div>
+        </div>
+        <div class="tracks-grid" id="tracks-grid"></div>
+
+        <!-- Artists -->
+        <div class="section-header" style="margin-top:32px">
+          <div class="section-title">🎤 Trending Artists</div>
+        </div>
+        <div class="tracks-grid" id="artists-grid"></div>
+      </div>
+
+      <!-- STORIES PAGE -->
+      <div class="page" id="page-stories">
+        <h1 class="page-title">Stories ✨</h1>
+        <div id="stories-page-content">
+          <button class="btn btn-primary" style="width:auto;margin-bottom:24px;padding:12px 24px" onclick="openCreateStoryModal()">+ Add Your Story</button>
+          <div id="stories-page-groups"></div>
+        </div>
+      </div>
+
+      <!-- MESSAGES PAGE -->
+      <div class="page" id="page-messages">
+        <div class="messages-layout">
+          <!-- Conversations List -->
+          <div class="conversations-list" id="conversations-panel">
+            <div class="conversations-header">
+              <h3>Messages 💬</h3>
+              <input type="text" class="form-input" placeholder="Search conversations..." style="font-size:13px;padding:8px 12px" oninput="filterConversations(this.value)">
+            </div>
+            <div id="conversations-list-items"></div>
+          </div>
+
+          <!-- Chat Area -->
+          <div class="chat-area">
+            <div class="chat-placeholder" id="chat-placeholder">
+              <div class="chat-placeholder-icon">💬</div>
+              <div style="font-size:16px;font-weight:600">Select a conversation</div>
+              <div style="font-size:13px;color:var(--text-muted)">Choose from your conversations or search for someone</div>
+              <button class="btn btn-primary" style="margin-top:12px;width:auto;padding:12px 24px" onclick="navigateTo('explore')">Find People</button>
+            </div>
+
+            <div id="chat-active" style="display:none;flex-direction:column;height:100%">
+              <div class="chat-header">
+                <img src="" class="chat-header-avatar" id="chat-header-avatar" alt="">
+                <div class="chat-header-info">
+                  <div class="chat-header-name" id="chat-header-name"></div>
+                  <div class="chat-header-status" id="chat-header-status"></div>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="navigateTo('profile', {username: document.getElementById('chat-header-name').textContent})">View Profile</button>
+              </div>
+
+              <div class="chat-messages" id="chat-messages">
+                <div class="typing-indicator" id="typing-indicator">
+                  <div class="typing-dots">
+                    <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+                  </div>
+                  <span class="typing-name">Someone is typing...</span>
+                </div>
+              </div>
+
+              <div class="chat-input-area">
+                <button class="topbar-btn" onclick="document.getElementById('msg-file-input').click()" title="Send Image">📎</button>
+                <input type="file" id="msg-file-input" accept="image/*" style="display:none" onchange="sendImageMessage(this)">
+                <textarea class="chat-input" id="chat-input" placeholder="Message..." rows="1" onkeydown="(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}handleChatTyping();}" oninput="handleChatTyping()"></textarea>
+                <button class="chat-send-btn" onclick="sendMessage()">➤</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS PAGE -->
+      <div class="page" id="page-notifications">
+        <div class="section-header">
+          <h1 class="page-title" style="margin:0">Notifications 🔔</h1>
+          <button class="btn btn-ghost btn-sm" onclick="api.put('/notifications/read');updateNotifBadge(0);loadNotifications()">Mark all read</button>
+        </div>
+        <div class="notifications-list" id="notifications-list"></div>
+      </div>
+
+      <!-- VIBEY AI PAGE -->
+      <div class="page" id="page-vibey">
+        <h1 class="page-title">Vibey AI 🤖</h1>
+        <div style="max-width:600px;margin:0 auto">
+          <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--border-radius);padding:24px;text-align:center;margin-bottom:24px">
+            <div style="font-size:64px;margin-bottom:12px">🐝</div>
+            <h2 style="font-family:var(--font-display);font-size:24px;margin-bottom:8px">Meet Vibey</h2>
+            <p style="color:var(--text-secondary)">Your Gen Z AI music assistant. Ask me for recommendations, mood playlists, artist discoveries, and more!</p>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid rgba(124,58,237,0.3);border-radius:var(--border-radius);overflow:hidden">
+            <div style="padding:16px;background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(79,70,229,0.15));border-bottom:1px solid rgba(124,58,237,0.2);display:flex;align-items:center;gap:12px">
+              <span style="font-size:32px">🐝</span>
+              <div>
+                <div style="font-weight:700">Vibey</div>
+                <div style="font-size:12px;color:#A78BFA">Your music bestie ✨</div>
+              </div>
+            </div>
+            <div id="vibey-messages-page" style="height:400px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px"></div>
+            <div style="padding:12px;border-top:1px solid rgba(124,58,237,0.2);display:flex;gap:8px">
+              <input class="vibey-input" id="vibey-page-input" placeholder="Ask Vibey anything about music..." onkeydown="if(event.key==='Enter')sendVibeyPageMessage()">
+              <button class="vibey-send" onclick="sendVibeyPageMessage()">➤</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AVATAR STUDIO PAGE -->
+      <div class="page" id="page-avatar">
+        <h1 class="page-title">Avatar Studio 🎨</h1>
+        <div class="avatar-builder">
+          <!-- Preview -->
+          <div class="avatar-preview-panel">
+            <div class="avatar-canvas-container">
+              <div class="avatar-canvas-bg"></div>
+              <div id="avatar-display"></div>
+            </div>
+            <div style="display:flex;gap:12px;width:100%">
+              <button class="btn btn-primary" style="flex:1" onclick="saveAvatar()">Save Avatar 💾</button>
+              <button class="btn btn-ghost btn-sm" onclick="navigateTo('profile', {username: currentUser?.username})">View Profile</button>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);text-align:center">Your avatar will appear on your profile and posts</div>
+          </div>
+
+          <!-- Controls -->
+          <div class="avatar-builder-controls">
+            <div class="avatar-tabs" id="avatar-tabs"></div>
+            <div class="avatar-options-panel" id="avatar-options-panel"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE PAGE -->
+      <div class="page" id="page-profile">
+        <div id="profile-content"></div>
+        <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="previewProfileAvatar(this)">
+      </div>
+
+      <!-- SETTINGS PAGE -->
+      <div class="page" id="page-settings">
+        <h1 class="page-title">Settings ⚙️</h1>
+        <div class="settings-grid">
+          <div class="settings-nav">
+            <div class="settings-nav-item active" onclick="showSettingsSection('account', this)">👤 Account</div>
+            <div class="settings-nav-item" onclick="showSettingsSection('appearance', this)">🎨 Appearance</div>
+            <div class="settings-nav-item" onclick="showSettingsSection('privacy', this)">🔒 Privacy</div>
+            <div class="settings-nav-item" onclick="showSettingsSection('notifications', this)">🔔 Notifications</div>
+          </div>
+          <div>
+            <div class="settings-section" id="settings-account">
+              <div class="settings-section-title">Account</div>
+              <div class="settings-row">
+                <div class="settings-row-info">
+                  <div class="settings-row-label">Username</div>
+                  <div class="settings-row-desc" id="settings-username-val">@username</div>
+                </div>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-info">
+                  <div class="settings-row-label">Email</div>
+                  <div class="settings-row-desc" id="settings-email-val">email</div>
+                </div>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-info">
+                  <div class="settings-row-label">Role</div>
+                  <div class="settings-row-desc" id="settings-role-val">listener</div>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="openEditProfileModal()">Edit</button>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-info">
+                  <div class="settings-row-label">Sign Out</div>
+                  <div class="settings-row-desc">Log out of your account</div>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="handleLogout()">Sign Out</button>
+              </div>
+            </div>
+
+            <div class="settings-section hidden" id="settings-appearance">
+              <div class="settings-section-title">Appearance</div>
+              <div class="settings-row">
+                <div class="settings-row-info">
+                  <div class="settings-row-label">Dark Mode</div>
+                  <div class="settings-row-desc">Toggle between dark and light theme</div>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="dark-mode-toggle" onchange="toggleTheme()" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-section hidden" id="settings-privacy">
+              <div class="settings-section-title">Privacy</div>
+              <div class="settings-row">
+                <div class="settings-row-info">
+                  <div class="settings-row-label">Public Profile</div>
+                  <div class="settings-row-desc">Allow anyone to see your profile</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+              </div>
+            </div>
+
+            <div class="settings-section hidden" id="settings-notifications-section">
+              <div class="settings-section-title">Notifications</div>
+              <div class="settings-row">
+                <div class="settings-row-info">
+                  <div class="settings-row-label">Push Notifications</div>
+                  <div class="settings-row-desc">Receive real-time alerts</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main><!-- end main-content -->
+  </div><!-- end app-layout -->
+
+  <!-- ============================================================
+       MOBILE BOTTOM NAV
+       ============================================================ -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-nav-item active" data-page="home" onclick="navigateTo('home')"><span class="mobile-nav-icon">🏠</span>Home</div>
+    <div class="mobile-nav-item" data-page="explore" onclick="navigateTo('explore')"><span class="mobile-nav-icon">🔍</span>Explore</div>
+    <div class="mobile-nav-item" onclick="openCreatePostModal()"><span class="mobile-nav-icon" style="background:var(--accent-gold);color:#0A0A0B;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:2px">➕</span></div>
+    <div class="mobile-nav-item" data-page="messages" onclick="navigateTo('messages')"><span class="mobile-nav-icon">💬</span>Messages</div>
+    <div class="mobile-nav-item" data-page="profile" onclick="navigateTo('profile', {username: currentUser?.username})"><span class="mobile-nav-icon">👤</span>Profile</div>
+  </nav>
+
+  <!-- ============================================================
+       MINI MUSIC PLAYER
+       ============================================================ -->
+  <div class="mini-player" id="mini-player">
+    <img src="" class="mini-player-art" id="player-art" alt="Album art" onerror="this.style.display='none'">
+    <div class="mini-player-info">
+      <div class="mini-player-track" id="player-track">No track playing</div>
+      <div class="mini-player-artist" id="player-artist"></div>
+    </div>
+    <div class="mini-player-progress">
+      <div class="progress-bar" onclick="seekTrack(event)">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-times">
+        <span id="player-current">0:00</span>
+        <span id="player-duration">0:00</span>
+      </div>
+    </div>
+    <div class="mini-player-controls">
+      <button class="player-control-btn" onclick="adjustVolume(0.5)" title="Volume">🔊</button>
+      <button class="player-play-btn" id="player-play-btn" onclick="togglePlay()">▶</button>
+    </div>
+    <button class="player-close-btn" onclick="hideMiniPlayer()">✕</button>
+  </div>
+
+  <!-- ============================================================
+       VIBEY AI WIDGET
+       ============================================================ -->
+  <button class="vibey-float-btn" onclick="toggleVibeyChat()" title="Chat with Vibey">🐝</button>
+
+  <div class="vibey-chat-popup" id="vibey-popup">
+    <div class="vibey-header">
+      <span class="vibey-avatar">🐝</span>
+      <div class="vibey-info">
+        <div class="vibey-name">Vibey</div>
+        <div class="vibey-status">● Your music AI bestie</div>
+      </div>
+      <button onclick="toggleVibeyChat()" style="color:var(--text-muted);font-size:20px;background:none;border:none;cursor:pointer">×</button>
+    </div>
+    <div class="vibey-messages" id="vibey-messages"></div>
+    <div class="typing-indicator vibey-typing" id="vibey-typing">
+      <div class="typing-dots">
+        <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+      </div>
+      <span>Vibey is typing...</span>
+    </div>
+    <div class="vibey-input-area">
+      <input class="vibey-input" id="vibey-input" placeholder="Ask Vibey..." onkeydown="handleVibeyKeydown(event)">
+      <button class="vibey-send" onclick="sendVibeyMessage()">➤</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODALS
+       ============================================================ -->
+
+  <!-- Create Post Modal -->
+  <div class="modal-overlay" id="create-post-modal" onclick="if(event.target===this)closeModal('create-post-modal')">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Create Post 🐝</div>
+        <button class="modal-close" onclick="closeModal('create-post-modal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="create-post-type-tabs">
+          <button class="post-type-btn active" data-type="text" onclick="setPostType('text', this)">✍️ Text</button>
+          <button class="post-type-btn" data-type="image" onclick="setPostType('image', this)">📸 Photo</button>
+          <button class="post-type-btn" data-type="music" onclick="setPostType('music', this)">🎵 Music</button>
+          <button class="post-type-btn" data-type="mood" onclick="setPostType('mood', this)">✨ Mood</button>
+        </div>
+
+        <textarea class="post-caption-input" id="post-caption" placeholder="What's buzzing today? Share your vibe... #music #vibes"></textarea>
+
+        <!-- Media Upload -->
+        <div class="media-upload-area" id="media-upload-area" onclick="document.getElementById('media-file-input').click()">
+          <div class="upload-icon">📸</div>
+          <div class="upload-text">Click to upload photo or video</div>
+          <input type="file" id="media-file-input" accept="image/*,video/*" style="display:none" onchange="handleMediaSelect(event)">
+        </div>
+        <div id="media-preview-container"></div>
+
+        <!-- Music Selector -->
+        <div class="music-selector" id="music-selector">
+          <div class="music-selector-title">🎵 Add a Music Track</div>
+          <div id="music-search-container"></div>
+        </div>
+
+        <button class="btn btn-primary" id="submit-post-btn" onclick="submitPost()">Share Post 🐝</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Story Modal -->
+  <div class="modal-overlay" id="create-story-modal" onclick="if(event.target===this)closeModal('create-story-modal')">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Add Story ✨</div>
+        <button class="modal-close" onclick="closeModal('create-story-modal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="media-upload-area show" onclick="document.getElementById('story-file-input').click()" id="story-upload-area">
+          <div class="upload-icon">✨</div>
+          <div class="upload-text">Upload photo or video for your story</div>
+          <input type="file" id="story-file-input" accept="image/*,video/*" style="display:none" onchange="previewStory(this)">
+        </div>
+        <div id="story-preview-container"></div>
+        <div class="form-group" style="margin-top:16px">
+          <input type="text" id="story-caption-input" class="form-input" placeholder="Add a caption...">
+        </div>
+        <button class="btn btn-primary" id="submit-story-btn" onclick="submitStory()">Share Story ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div class="modal-overlay" id="edit-profile-modal" onclick="if(event.target===this)closeModal('edit-profile-modal')">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header">
+        <div class="modal-title">Edit Profile ✏️</div>
+        <button class="modal-close" onclick="closeModal('edit-profile-modal')">×</button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="updateProfile(event)">
+
+          <!-- Avatar Upload -->
+          <div class="form-group" style="text-align:center;margin-bottom:24px">
+            <div style="position:relative;display:inline-block">
+              <img src="" id="edit-avatar-preview"
+                style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--accent-gold);background:var(--bg-tertiary);display:block"
+                alt="Preview">
+              <div onclick="document.getElementById('avatar-file-input').click()"
+                style="position:absolute;bottom:2px;right:2px;width:32px;height:32px;border-radius:50%;background:var(--accent-gold);color:#0A0A0B;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,0.3)">
+                📷
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:8px">Click camera to change photo</div>
+            <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="previewProfileAvatar(this)">
+          </div>
+
+          <!-- Display Name -->
+          <div class="form-group">
+            <label class="form-label">Display Name</label>
+            <input type="text" id="edit-displayname" class="form-input" placeholder="Your display name" maxlength="30">
+          </div>
+
+          <!-- Bio -->
+          <div class="form-group">
+            <label class="form-label">Bio <span id="bio-char-count" style="color:var(--text-muted);font-weight:400;font-size:11px">(0/200)</span></label>
+            <textarea id="edit-bio" class="form-input"
+              style="min-height:90px;resize:vertical;line-height:1.5"
+              placeholder="Tell the world about yourself... 🎵 What's your vibe?"
+              maxlength="200"
+              oninput="document.getElementById('bio-char-count').textContent='('+this.value.length+'/200)'"></textarea>
+          </div>
+
+          <!-- Role -->
+          <div class="form-group">
+            <label class="form-label">I am a...</label>
+            <div class="role-select-grid" id="edit-role-grid">
+              <div><input type="radio" name="edit-role" id="edit-role-listener" value="listener" class="role-option"><label for="edit-role-listener" class="role-label"><span class="role-icon">🎧</span>Listener</label></div>
+              <div><input type="radio" name="edit-role" id="edit-role-artist" value="artist" class="role-option"><label for="edit-role-artist" class="role-label"><span class="role-icon">🎤</span>Artist</label></div>
+              <div><input type="radio" name="edit-role" id="edit-role-producer" value="producer" class="role-option"><label for="edit-role-producer" class="role-label"><span class="role-icon">🎛️</span>Producer</label></div>
+              <div><input type="radio" name="edit-role" id="edit-role-songwriter" value="songwriter" class="role-option"><label for="edit-role-songwriter" class="role-label"><span class="role-icon">✍️</span>Songwriter</label></div>
+              <div><input type="radio" name="edit-role" id="edit-role-creator" value="creator" class="role-option"><label for="edit-role-creator" class="role-label"><span class="role-icon">🌟</span>Creator</label></div>
+            </div>
+          </div>
+
+          <!-- Mood Tags -->
+          <div class="form-group">
+            <label class="form-label">Mood Tags <span style="color:var(--text-muted);font-weight:400;font-size:11px">(pick your vibes)</span></label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px" id="mood-tags-grid">
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" value="🔥 Lit" class="mood-tag-check" style="accent-color:var(--accent-gold)"> 🔥 Lit</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" value="🌙 Chill" class="mood-tag-check" style="accent-color:var(--accent-gold)"> 🌙 Chill</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" value="💜 Melancholy" class="mood-tag-check" style="accent-color:var(--accent-gold)"> 💜 Melancholy</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" value="⚡ Hype" class="mood-tag-check" style="accent-color:var(--accent-gold)"> ⚡ Hype</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" value="🌊 Wavy" class="mood-tag-check" style="accent-color:var(--accent-gold)"> 🌊 Wavy</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" value="✨ Dreamy" class="mood-tag-check" style="accent-color:var(--accent-gold)"> ✨ Dreamy</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" value="🎯 Focused" class="mood-tag-check" style="accent-color:var(--accent-gold)"> 🎯 Focused</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" value="💃 Party" class="mood-tag-check" style="accent-color:var(--accent-gold)"> 💃 Party</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="margin-top:8px">Save Changes ✨</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post Detail Modal -->
+  <div class="modal-overlay" id="post-detail-modal" onclick="if(event.target===this)closeModal('post-detail-modal')">
+    <div class="modal" style="max-width:680px">
+      <div class="modal-header">
+        <div class="modal-title">Post</div>
+        <button class="modal-close" onclick="closeModal('post-detail-modal')">×</button>
+      </div>
+      <div class="modal-body" id="post-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div class="modal-overlay" id="image-modal-overlay" onclick="closeModal('image-modal-overlay')" style="z-index:900">
+    <img id="image-modal-img" src="" style="max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain" alt="Full image">
+  </div>
+
+  <!-- Story Viewer -->
+  <div class="story-viewer" id="story-viewer">
+    <div class="story-viewer-container">
+      <div class="story-progress-bars" id="story-progress-bars"></div>
+      <div class="story-viewer-header">
+        <img src="" class="story-viewer-avatar" id="story-viewer-avatar" alt="">
+        <span class="story-viewer-name" id="story-viewer-name"></span>
+        <span class="story-viewer-time" id="story-viewer-time"></span>
+        <button class="story-close-btn" onclick="closeStoryViewer()">×</button>
+      </div>
+      <img src="" class="story-media" id="story-media" alt="Story" onerror="this.src=''">
+      <div class="story-caption" id="story-caption"></div>
+      <div class="story-nav">
+        <div class="story-nav-btn" onclick="prevStory()"></div>
+        <div class="story-nav-btn" onclick="nextStory()"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end #app -->
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.2/socket.io.min.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/feed.js"></script>
+<script src="/js/music.js"></script>
+<script src="/js/app.js"></script>
+
+<script>
+// ---- Additional helper functions ----
+function openMobileSidebar() {
+  document.getElementById('sidebar').classList.add('mobile-open');
+  document.getElementById('sidebar-overlay').classList.add('show');
+}
+function closeMobileSidebar() {
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.getElementById('sidebar-overlay').classList.remove('show');
+}
+
+function showSettingsSection(section, el) {
+  document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('[id^="settings-"]').forEach(s => s.classList.add('hidden'));
+  const sectionMap = { account: 'settings-account', appearance: 'settings-appearance', privacy: 'settings-privacy', notifications: 'settings-notifications-section' };
+  document.getElementById(sectionMap[section])?.classList.remove('hidden');
+}
+
+function previewProfileAvatar(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById('edit-avatar-preview').src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function previewStory(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const container = document.getElementById('story-preview-container');
+    const isVideo = file.type.startsWith('video');
+    container.innerHTML = isVideo
+      ? `<video src="${e.target.result}" style="width:100%;max-height:300px;border-radius:12px;margin-top:12px" controls></video>`
+      : `<img src="${e.target.result}" style="width:100%;max-height:300px;object-fit:contain;border-radius:12px;margin-top:12px">`;
+    document.getElementById('story-upload-area').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function filterConversations(query) {
+  const items = document.querySelectorAll('.conversation-item');
+  items.forEach(item => {
+    const name = item.querySelector('.conv-name')?.textContent?.toLowerCase() || '';
+    item.style.display = name.includes(query.toLowerCase()) ? 'flex' : 'none';
+  });
+}
+
+async function sendImageMessage(input) {
+  if (!input.files[0] || !currentConversation) return;
+  const formData = new FormData();
+  formData.append('media', input.files[0]);
+  try {
+    await api.post(`/messages/${currentConversation.id}`, formData, true);
+    input.value = '';
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
+
+// Handle chat input keydown
+document.addEventListener('DOMContentLoaded', () => {
+  const chatInput = document.getElementById('chat-input');
+  if (chatInput) {
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      } else {
+        handleChatTyping();
+      }
+    });
+  }
+  // Theme sync for settings toggle
+  const darkToggle = document.getElementById('dark-mode-toggle');
+  if (darkToggle) {
+    darkToggle.checked = document.documentElement.getAttribute('data-theme') !== 'light';
+  }
+});
+
+// Sidebar user avatar sync
+function updateCreatePostAvatar() {
+  const el = document.getElementById('create-post-avatar');
+  if (el && currentUser) el.src = getAvatarUrl(currentUser);
+}
+
+// Override initApp to also update create post avatar
+const _origInitApp = initApp;
+window.initApp = function() {
+  _origInitApp();
+  updateCreatePostAvatar();
+};
+
+// Vibey page chat (separate from popup)
+let vibeyPageHistory = [];
+async function sendVibeyPageMessage() {
+  const input = document.getElementById('vibey-page-input');
+  const text = input?.value?.trim();
+  if (!text) return;
+  input.value = '';
+  const msgs = document.getElementById('vibey-messages-page');
+  if (!msgs) return;
+  msgs.insertAdjacentHTML('beforeend', `<div class="vibey-msg user">${escapeHtml(text)}</div>`);
+  vibeyPageHistory.push({ role: 'user', content: text });
+  msgs.scrollTop = msgs.scrollHeight;
+  try {
+    const res = await api.post('/vibey/chat', { message: text, history: vibeyPageHistory.slice(-10).map(h => ({ role: h.role === 'bot' ? 'assistant' : 'user', content: h.content })) });
+    msgs.insertAdjacentHTML('beforeend', `<div class="vibey-msg bot">${res.reply}</div>`);
+vibeyPageHistory.push({ role: 'bot', content: res.reply });
+    msgs.scrollTop = msgs.scrollHeight;
+  } catch {
+    msgs.insertAdjacentHTML('beforeend', `<div class="vibey-msg bot">oops my brain glitched! 😅 try again bestie</div>`);
+  }
+}
+
+// Load stories on stories page
+pageLoaders.stories = async () => {
+  const container = document.getElementById('stories-page-groups');
+  if (!container) return;
+  try {
+    const res = await api.get('/stories');
+    container.innerHTML = res.storyGroups.map(group => `
+      <div style="margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div class="story-avatar-ring" style="width:48px;height:48px;cursor:pointer" onclick="openStoryViewer(${JSON.stringify(group).replace(/"/g, '&quot;')})">
+            <img src="${getAvatarUrl(group.user)}" class="story-avatar-img" alt="">
+          </div>
+          <div>
+            <div style="font-weight:700">${group.user.displayName || group.user.username}</div>
+            <div style="font-size:12px;color:var(--text-muted)">${group.stories.length} story${group.stories.length > 1 ? 'ies' : 'y'}</div>
+          </div>
+        </div>
+      </div>`).join('') || `<div class="empty-state"><div class="empty-icon">✨</div><div class="empty-title">No stories yet</div><div class="empty-sub">Follow creators to see their stories</div></div>`;
+  } catch {}
+};
+
+// Load trending music widget in home sidebar
+async function loadTrendingMusicWidget() {
+  const el = document.getElementById('trending-music-widget');
+  if (!el) return;
+
+  const fallbackTracks = [
+    { name: 'Summer Vibes', artist: 'Jahzzar', duration: 214, albumArt: 'https://usercontent.jamendo.com?type=album&id=116&width=300', previewUrl: 'https://mp3d.jamendo.com/download/track/1104219/mp32/' },
+    { name: 'Acoustic Breeze', artist: 'Benjamin Tissot', duration: 144, albumArt: 'https://usercontent.jamendo.com?type=album&id=122&width=300', previewUrl: 'https://mp3d.jamendo.com/download/track/1023430/mp32/' },
+    { name: 'Energy', artist: 'Bensound', duration: 183, albumArt: 'https://usercontent.jamendo.com?type=album&id=133&width=300', previewUrl: 'https://mp3d.jamendo.com/download/track/1023490/mp32/' },
+    { name: 'Ukulele', artist: 'Bensound', duration: 164, albumArt: 'https://usercontent.jamendo.com?type=album&id=144&width=300', previewUrl: 'https://mp3d.jamendo.com/download/track/1023500/mp32/' },
+    { name: 'Tenderness', artist: 'Bensound', duration: 193, albumArt: 'https://usercontent.jamendo.com?type=album&id=155&width=300', previewUrl: 'https://mp3d.jamendo.com/download/track/1023510/mp32/' },
+  ];
+
+  const renderTracks = (tracks) => {
+    el.innerHTML = tracks.map(t => `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer"
+        onclick='playTrack(${JSON.stringify(t).replace(/"/g, "&quot;")})'>
+        <img src="${t.albumArt || t.album_image || t.image || ''}" style="width:36px;height:36px;border-radius:8px;object-fit:cover;background:var(--bg-tertiary);flex-shrink:0" alt="" onerror="this.style.background='var(--bg-tertiary)';this.style.display='block'">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.name}</div>
+          <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.artist || t.artist_name}</div>
+        </div>
+        <span style="font-size:11px;color:var(--text-muted);flex-shrink:0">${formatDuration(t.duration)}</span>
+      </div>`).join('');
+  };
+
+  try {
+    const params = new URLSearchParams({ client_id: 'b6747d04', format: 'json', audioformat: 'mp32', imagesize: 300, limit: 5, order: 'popularity_total' });
+    const res = await fetch(`https://api.jamendo.com/v3.0/tracks/?${params}`);
+    const data = await res.json();
+    const tracks = data.results || [];
+    if (!tracks.length) throw new Error('no tracks');
+    renderTracks(tracks.map(t => ({ name: t.name, artist: t.artist_name, albumArt: t.album_image || t.image, previewUrl: t.audio, duration: t.duration })));
+  } catch {
+    renderTracks(fallbackTracks);
+  }
+}
+
+// Override home page loader — defer heavy calls so page renders instantly
+const _origHomeLoader = pageLoaders.home;
+pageLoaders.home = () => {
+  // Load feed first (most important)
+  loadFeed(true);
+  // Defer everything else
+  setTimeout(() => loadStories(), 200);
+  setTimeout(() => loadSuggestedUsers(), 400);
+  loadTrendingMusicWidget();
+  setTimeout(() => loadTrendingMusicWidget(), 600);
+
+};
+
+function searchTag(tag) {
+  navigateTo('music');
+  setTimeout(() => {
+    const input = document.getElementById('music-search-input');
+    if (input) { input.value = tag; searchMusic(tag); }
+  }, 300);
+}
+
+function escapeHtml(t) {
+  const d = document.createElement('div'); d.textContent = t; return d.innerHTML;
+}
+</script>
+</body>
+</html>

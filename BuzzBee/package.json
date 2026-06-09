@@ -1,0 +1,10 @@
+{
+  "name": "buzzbee",
+  "version": "1.0.0",
+  "description": "BuzzBee - Music Social Platform",
+  "scripts": {
+    "install-backend": "cd backend && npm install",
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev"
+  }
+}
