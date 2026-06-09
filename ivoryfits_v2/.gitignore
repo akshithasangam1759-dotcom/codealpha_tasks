@@ -1,0 +1,12 @@
+# Dependencies - these are HUGE and unnecessary
+node_modules/
+
+# Your secret keys - NEVER push these!!
+.env
+backend/.env
+.env.local
+.env.production
+
+# Logs
+*.log
+npm-debug.log*

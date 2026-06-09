@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IvoryFits — Luxury Fashion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+
+  .hero-cards {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .model-card {
+    border-radius: 16px;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: transform 0.4s ease;
+  }
+  .model-card:hover { transform: translateY(-8px) scale(1.02); }
+
+  .card-1 .model-img { width: 220px; height: 420px; }
+  .card-2 .model-img { width: 260px; height: 500px; }
+  .card-3 .model-img { width: 220px; height: 420px; }
+
+  .model-img { overflow: hidden; position: relative; }
+  .model-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .model-label { display: none; }
+
+  /* ── MOBILE HERO CARDS ── */
+  @media (max-width: 1100px) {
+    .hero {
+      flex-direction: column;
+      align-items: flex-start;
+      padding-bottom: 2rem;
+      min-height: unset;
+    }
+    .hero-content {
+      padding-top: 6rem !important;
+      padding-bottom: 1.5rem !important;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-cards {
+      position: relative !important;
+      right: auto !important;
+      top: auto !important;
+      transform: none !important;
+      width: 100%;
+      display: flex !important;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 0 1rem 2rem;
+    }
+    .card-1 .model-img { width: calc(30vw) !important; height: calc(38vw) !important; max-width: 130px; max-height: 180px; }
+    .card-2 .model-img { width: calc(34vw) !important; height: calc(44vw) !important; max-width: 150px; max-height: 210px; }
+    .card-3 .model-img { width: calc(30vw) !important; height: calc(38vw) !important; max-width: 130px; max-height: 180px; }
+  }
+
+  /* ── MOBILE USER PORTAL ── */
+  @media (max-width: 768px) {
+    #userPortalModal > div {
+      width: 100% !important;
+      height: 100% !important;
+      max-height: 100vh !important;
+      border-radius: 0 !important;
+    }
+    #userPortalModal > div > div:nth-child(2) {
+      grid-template-columns: 1fr !important;
+    }
+    #userPortalModal > div > div:nth-child(2) > div:first-child {
+      flex-direction: row !important;
+      overflow-x: auto !important;
+      padding: 0.5rem !important;
+      border-right: none !important;
+      border-bottom: 1px solid var(--border) !important;
+    }
+    .portal-nav-item {
+      padding: 0.6rem 0.9rem !important;
+      border-left: none !important;
+      border-bottom: 3px solid transparent !important;
+      white-space: nowrap !important;
+      font-size: 0.65rem !important;
+    }
+    .portal-nav-item.active {
+      border-left-color: transparent !important;
+      border-bottom-color: var(--gold) !important;
+    }
+    #portal-wishlist-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
+    #portal-profile > div:nth-child(2) {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* Mega Menu */
+  .nav-mega-wrapper { position: relative; }
+  .nav-mega-wrapper > .nav-link { display: flex; align-items: center; gap: 4px; }
+  .nav-mega-wrapper > .nav-link .chevron { font-size: 0.55rem; transition: transform 0.3s ease; display: inline-block; margin-top: 1px; }
+  .nav-mega-wrapper:hover > .nav-link .chevron { transform: rotate(180deg); }
+  .mega-menu {
+    position: absolute; top: calc(100% + 1px); left: 50%;
+    transform: translateX(-50%);
+    background: rgba(12,12,12,0.98);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(201,169,110,0.15);
+    border-top: 2px solid var(--gold);
+    border-radius: 0 0 16px 16px;
+    padding: 2rem;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    min-width: 680px;
+    opacity: 0; pointer-events: none;
+    transform: translateX(-50%) translateY(-8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 2000;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+  }
+  [data-theme="light"] .mega-menu { background: rgba(252,250,246,0.98); border-color: rgba(201,169,110,0.2); }
+  .nav-mega-wrapper:hover .mega-menu { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+  .mega-col { padding: 0 1.5rem; border-right: 1px solid rgba(255,255,255,0.06); }
+  .mega-col:last-child { border-right: none; }
+  [data-theme="light"] .mega-col { border-right-color: rgba(0,0,0,0.06); }
+  .mega-col-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid rgba(201,169,110,0.2); }
+  .mega-col-header .col-icon { font-size: 1.1rem; }
+  .mega-col-header h4 { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); }
+  .mega-links { display: flex; flex-direction: column; gap: 0.1rem; }
+  .mega-link { font-size: 0.78rem; color: var(--text2); padding: 0.32rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; cursor: pointer; white-space: nowrap; letter-spacing: 0.02em; }
+  .mega-link:hover { color: var(--text); background: rgba(201,169,110,0.08); padding-left: 1rem; }
+
+  /* Filter bar */
+  .filters-bar { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 3rem; max-width: 1200px; margin-left: auto; margin-right: auto; }
+  .gender-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+  .gender-tab { padding: 0.8rem 2rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text3); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.25s ease; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; }
+  .gender-tab:hover { color: var(--text); }
+  .gender-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .subcategory-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; min-height: 38px; }
+  .subcategory-row .pill { font-size: 0.67rem; padding: 0.38rem 0.9rem; }
+  .controls-row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .price-filter { display: flex; align-items: center; gap: 0.75rem; }
+  .price-filter label { font-size: 0.72rem; color: var(--text2); white-space: nowrap; }
+
+  @media (max-width: 900px) {
+    .mega-menu { min-width: 320px; grid-template-columns: 1fr; }
+    .mega-col { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 0 1rem; margin-bottom: 1rem; }
+    .mega-col:last-child { border-bottom: none; margin-bottom: 0; }
+  }
+  @media (max-width: 768px) { .gender-tab { padding: 0.7rem 1rem; } }
+</style>
+</head>
+<body>
+  <!-- ══ INTRO ANIMATION OVERLAY ══ -->
+<div id="introOverlay" style="
+  position:fixed;inset:0;z-index:99999;
+  background:#0a0a0a;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:0;
+  overflow:hidden;
+">
+  <div id="introLogo" style="
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(2.5rem,6vw,5rem);
+    font-weight:300;letter-spacing:0.3em;
+    color:#c9a96e;text-transform:uppercase;
+    opacity:0;transform:translateY(40px);
+    transition:opacity 0.9s ease,transform 0.9s ease;
+  ">IvoryFits</div>
+  <div id="introSub" style="
+    font-family:'Montserrat',sans-serif;
+    font-size:0.7rem;font-weight:500;
+    letter-spacing:0.5em;text-transform:uppercase;
+    color:rgba(201,169,110,0.5);margin-top:12px;
+    opacity:0;transform:translateY(20px);
+    transition:opacity 0.8s ease 0.3s,transform 0.8s ease 0.3s;
+  ">Luxury Fashion</div>
+  <div id="introLine" style="
+    width:0px;height:1px;background:rgba(201,169,110,0.4);
+    margin-top:24px;
+    transition:width 1s ease 0.6s;
+  "></div>
+</div>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-brand"><span class="brand-icon">◈</span><span class="brand-name">IVORYFITS</span></div>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home" class="nav-link active">Home</a></li>
+
+    <!-- MEN MEGA -->
+    <li class="nav-mega-wrapper">
+      <a class="nav-link" href="#products" onclick="setGender('men');scrollToSection('products');return false;">
+        Men <span class="chevron">▾</span>
+      </a>
+      <div class="mega-menu">
+        <div class="mega-col">
+          <div class="mega-col-header"><span class="col-icon">👔</span><h4>Topwear</h4></div>
+          <div class="mega-links">
+            <div class="mega-link" onclick="filterByGenderCat('men','T-Shirts')">T-Shirts</div>
+            <div class="mega-link" onclick="filterByGenderCat('men','Shirts')">Shirts</div>
+            <div class="mega-link" onclick="filterByGenderCat('men','Hoodies & Sweatshirts')">Hoodies & Sweatshirts</div>
+            <div class="mega-link" onclick="filterByGenderCat('men','Jackets')">Jackets</div>
+            <div class="mega-link" onclick="filterByGenderCat('men','Co-ord Sets')">Co-ord Sets</div>
+            <div class="mega-link" onclick="filterByGenderCat('men','Activewear')">Activewear</div>
+          </div>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-header"><span class="col-icon">👖</span><h4>Bottomwear</h4></div>
+          <div class="mega-links">
+            <div class="mega-link" onclick="filterByGenderCat('men','Jeans')">Jeans</div>
+            <div class="mega-link" onclick="filterByGenderCat('men','Trousers')">Trousers</div>
+            <div class="mega-link" onclick="filterByGenderCat('men','Cargos')">Cargos</div>
+            <div class="mega-link" onclick="filterByGenderCat('men','Shorts')">Shorts</div>
+            <div class="mega-link" onclick="filterByGenderCat('men','Ethnic Wear')">Ethnic Wear</div>
+          </div>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-header"><span class="col-icon">👟</span><h4>More</h4></div>
+          <div class="mega-links">
+            <div class="mega-link" onclick="filterByGenderCat('men','Footwear')">Footwear</div>
+            <div class="mega-link" onclick="filterByGenderCat('men','Accessories')">Accessories</div>
+            <div class="mega-link" onclick="setGender('men');scrollToSection('products');return false;" style="color:var(--gold);margin-top:1rem;font-weight:600;">View All Men →</div>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- WOMEN MEGA -->
+    <li class="nav-mega-wrapper">
+      <a class="nav-link" href="#products" onclick="setGender('women');scrollToSection('products');return false;">
+        Women <span class="chevron">▾</span>
+      </a>
+      <div class="mega-menu">
+        <div class="mega-col">
+          <div class="mega-col-header"><span class="col-icon">👗</span><h4>Topwear</h4></div>
+          <div class="mega-links">
+            <div class="mega-link" onclick="filterByGenderCat('women','T-Shirts & Tops')">T-Shirts & Tops</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Shirts & Blouses')">Shirts & Blouses</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Hoodies & Sweatshirts')">Hoodies & Sweatshirts</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Jackets & Coats')">Jackets & Coats</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Co-ord Sets')">Co-ord Sets</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Activewear')">Activewear</div>
+          </div>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-header"><span class="col-icon">👘</span><h4>Bottomwear & Dresses</h4></div>
+          <div class="mega-links">
+            <div class="mega-link" onclick="filterByGenderCat('women','Jeans')">Jeans</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Trousers & Pants')">Trousers & Pants</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Skirts')">Skirts</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Shorts')">Shorts</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Dresses')">Dresses</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Ethnic Wear')">Ethnic Wear</div>
+          </div>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-header"><span class="col-icon">👠</span><h4>More</h4></div>
+          <div class="mega-links">
+            <div class="mega-link" onclick="filterByGenderCat('women','Footwear')">Footwear</div>
+            <div class="mega-link" onclick="filterByGenderCat('women','Accessories')">Accessories</div>
+            <div class="mega-link" onclick="setGender('women');scrollToSection('products');" style="color:var(--gold);margin-top:1rem;font-weight:600;">View All Women →</div>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- KIDS MEGA -->
+    <li class="nav-mega-wrapper">
+      <a class="nav-link" href="#products" onclick="setGender('kids');scrollToSection('products');return false;">
+        Kids <span class="chevron">▾</span>
+      </a>
+      <div class="mega-menu">
+        <div class="mega-col">
+          <div class="mega-col-header"><span class="col-icon">🧒</span><h4>Topwear</h4></div>
+          <div class="mega-links">
+            <div class="mega-link" onclick="filterByGenderCat('kids','T-Shirts & Tops')">T-Shirts & Tops</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Shirts')">Shirts</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Hoodies & Sweatshirts')">Hoodies & Sweatshirts</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Jackets')">Jackets</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Co-ord Sets')">Co-ord Sets</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Activewear')">Activewear</div>
+          </div>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-header"><span class="col-icon"></span><h4>Bottomwear & Dresses</h4></div>
+          <div class="mega-links">
+            <div class="mega-link" onclick="filterByGenderCat('kids','Jeans')">Jeans</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Trousers & Pants')">Trousers & Pants</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Shorts')">Shorts</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Dresses')">Dresses</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Ethnic Wear')">Ethnic Wear</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Nightwear')">Nightwear</div>
+          </div>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-header"><span class="col-icon">👟</span><h4>More</h4></div>
+          <div class="mega-links">
+            <div class="mega-link" onclick="filterByGenderCat('kids','Footwear')">Footwear</div>
+            <div class="mega-link" onclick="filterByGenderCat('kids','Accessories')">Accessories</div>
+            <div class="mega-link" onclick="setGender('kids');scrollToSection('products');" style="color:var(--gold);margin-top:1rem;font-weight:600;">View All Kids →</div>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li><a href="#collections" class="nav-link">Collections</a></li>
+    <li><a href="#about" class="nav-link">About</a></li>
+  </ul>
+
+  <div class="nav-actions">
+    <button class="theme-toggle" id="themeToggle"><span class="sun-icon">☀️</span><span class="moon-icon">🌙</span></button>
+    <button class="nav-btn" id="searchBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    <button class="nav-btn" id="cartBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="cart-badge" id="cartBadge">0</span></button>
+    <button class="nav-btn" id="authBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ══════════════════ SEARCH ══════════════════ -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="close-btn" id="closeSearch">✕</button>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search for pieces..." class="search-input" />
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-bg"><div class="hero-gradient"></div></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">New Collection — SS 2026</p>
+    <h1 class="hero-title">
+      <span class="line">Dressed in</span>
+      <span class="line italic">Silence,</span>
+      <span class="line">Loud in Style</span>
+    </h1>
+    <p class="hero-sub">Curated luxury pieces for the discerning soul.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="scrollToSection('products')">Explore Collection</button>
+      <button class="btn-ghost" onclick="scrollToSection('collections')">View Lookbook</button>
+    </div>
+  </div>
+  <div class="hero-scroll-indicator"><span>Scroll</span><div class="scroll-line"></div></div>
+  <div class="hero-cards">
+  <div class="model-card card-1">
+    <div class="model-img">
+      <img src="fashion_collection_1778002291913.png" alt="Collection 1"/>
+    </div>
+  </div>
+  <div class="model-card card-2">
+    <div class="model-img">
+      <img src="hero_fashion_1778001912094.png" alt="Collection 2"/>
+    </div>
+  </div>
+  <div class="model-card card-3">
+    <div class="model-img">
+      <img src="pops nd dauu.jpeg" alt="Collection 3"/>
+    </div>
+  </div>
+</div>
+
+</section>
+
+<!-- ══════════════════ MARQUEE ══════════════════ -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span>MEN</span><span>◈</span><span>WOMEN</span><span>◈</span><span>KIDS</span><span>◈</span><span>LUXURY</span><span>◈</span><span>IVORYFITS</span><span>◈</span><span>SS2026</span><span>◈</span><span>CURATED</span><span>◈</span><span>ICONIC</span><span>◈</span>
+    <span>MEN</span><span>◈</span><span>WOMEN</span><span>◈</span><span>KIDS</span><span>◈</span><span>LUXURY</span><span>◈</span><span>IVORYFITS</span><span>◈</span><span>SS2026</span><span>◈</span><span>CURATED</span><span>◈</span><span>ICONIC</span><span>◈</span>
+  </div>
+</div>
+
+<!-- ══════════════════ COLLECTIONS ══════════════════ -->
+<section class="collections" id="collections">
+  <div class="section-header">
+    <p class="section-eyebrow">The Edit</p>
+    <h2 class="section-title">Featured Collections</h2>
+  </div>
+  <div class="collections-grid">
+
+  <!-- Card 1 -->
+  <div class="collection-card large" data-cat="Pretty in Pink">
+    <div class="collection-bg col-noir">
+      <img src="https://images.pexels.com/photos/36888235/pexels-photo-36888235.jpeg" 
+      style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:1;"/>
+    </div>
+    <div class="collection-info">
+      <span class="collection-tag">Dress</span>
+      <h3>Pretty in Pink</h3>
+      <p>42 pieces</p>
+      <button class="collection-btn" onclick="filterByGenderCat('women','Dresses')">Shop Now →</button>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="collection-card" data-cat="Classy">
+    <div class="collection-bg" style="background:#e8e4df;">
+      <img src="https://images.pexels.com/photos/17417558/pexels-photo-17417558.jpeg" 
+      style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0.7;"/>
+    </div>
+    <div class="collection-info">
+      <span class="collection-tag">Classy</span>
+      <h3>graceful</h3>
+      <p>28 pieces</p>
+      <button class="collection-btn" onclick="filterByGenderCat('women','T-Shirts & Tops')">Shop Now →</button>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="collection-card" data-cat="streetwear">
+    <div class="collection-bg col-dark" style="background:#111;">
+      <img src="https://images.pexels.com/photos/27334193/pexels-photo-27334193.jpeg" 
+      style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0.7;"/>
+    </div>
+    <div class="collection-info">
+      <span class="collection-tag">Casual</span>
+      <h3>Stylish</h3>
+      <p>35 pieces</p>
+      <button class="collection-btn" onclick="filterByGenderCat('men','Hoodies & Sweatshirts')">Shop Now →</button>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══════════════════ PRODUCTS ══════════════════ -->
+<section class="products-section" id="products">
+  <div class="section-header">
+    <p class="section-eyebrow">The Wardrobe</p>
+    <h2 class="section-title">Shop All Pieces</h2>
+  </div>
+
+  <div class="filters-bar">
+    <!-- Row 1: Gender tabs -->
+    <div class="gender-tabs" id="genderTabs">
+      <button class="gender-tab active" data-gender="all" onclick="setGender('all')">✦ All</button>
+      <button class="gender-tab" data-gender="men" onclick="setGender('men')">👨 Men</button>
+      <button class="gender-tab" data-gender="women" onclick="setGender('women')">👩 Women</button>
+      <button class="gender-tab" data-gender="kids" onclick="setGender('kids')">🧒 Kids</button>
+    </div>
+
+    <!-- Row 2: Subcategory pills (dynamic) -->
+    <div class="subcategory-row" id="subcategoryRow">
+      <button class="pill active" data-filter="all" onclick="setSubcategory('all',this)">All</button>
+    </div>
+
+    <!-- Row 3: Price + Sort controls -->
+    <div class="controls-row">
+      <div class="price-filter">
+        <label>Max Price: <span id="priceVal">₹5000</span></label>
+        <input type="range" id="priceRange" min="0" max="5000" value="5000" class="price-slider" />
+      </div>
+      <select class="sort-select" id="sortSelect">
+        <option value="default">Sort: Featured</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- ══════════════════ STATS ══════════════════ -->
+<section class="trending-strip">
+  <div class="trend-stat"><span class="stat-num" data-target="12000">0</span><span class="stat-label">Happy Clients</span></div>
+  <div class="trend-divider">◈</div>
+  <div class="trend-stat"><span class="stat-num" data-target="340">0</span><span class="stat-label">Unique Pieces</span></div>
+  <div class="trend-divider">◈</div>
+  <div class="trend-stat"><span class="stat-num" data-target="18">0</span><span class="stat-label">Collections</span></div>
+  <div class="trend-divider">◈</div>
+  <div class="trend-stat"><span class="stat-num" data-target="99">0</span><span class="stat-label">% Satisfaction</span></div>
+</section>
+
+<!-- ══════════════════ ABOUT ══════════════════ -->
+<section class="about-section" id="about">
+  <div class="about-text">
+    <p class="section-eyebrow">Our Story</p>
+    <h2 class="section-title">Born from silence,<br/><em>defined by style.</em></h2>
+    <p class="about-body">IvoryFits was founded on the belief that true luxury is effortless. Each piece in our collection is thoughtfully curated, crafted with intentionality, and designed to outlast every trend.</p>
+    <button class="btn-primary" onclick="scrollToSection('products')">Discover the Collection</button>
+  </div>
+  <div class="about-visual">
+  <div class="about-card main-card">
+  <img src="https://images.pexels.com/photos/31305112/pexels-photo-31305112.jpeg"
+    style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;" alt="Editorial"/>
+  <div class="about-card-label">Editorial SS/26</div>
+</div>
+<div class="about-card side-card">
+  <img src="./logo.jpeg"
+    style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;" alt="Collection"/>
+</div>
+    <div class="gold-badge">◈ EST. 2026</div>
+  </div>
+</section>
+
+<!-- ══════════════════ CART SIDEBAR ══════════════════ -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header"><h3>Your Cart</h3><button class="close-btn" id="closeCart">✕</button></div>
+  <div class="cart-items" id="cartItems"><div class="empty-cart"><div class="empty-icon">◈</div><p>Your cart is empty</p><span>Add some pieces to get started</span></div></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    <button class="btn-primary full-width" id="checkoutBtn">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- ══════════════════ PRODUCT MODAL ══════════════════ -->
+<div class="modal-overlay" id="productModal">
+  <div class="product-modal">
+    <button class="close-btn modal-close" id="closeModal">✕</button>
+    <div class="modal-gallery" id="modalGallery"></div>
+    <div class="modal-info" id="modalInfo"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ AUTH MODAL ══════════════════ -->
+<div class="modal-overlay" id="authModal">
+  <div class="auth-modal">
+    <button class="close-btn" id="closeAuth">✕</button>
+    <div class="auth-tabs"><button class="auth-tab active" id="loginTab">Login</button><button class="auth-tab" id="signupTab">Sign Up</button></div>
+    <div class="auth-form" id="loginForm">
+      <h3>Welcome Back</h3>
+      <input type="email" placeholder="Email" class="form-input" id="loginEmail" />
+      <input type="password" placeholder="Password" class="form-input" id="loginPassword" />
+      <div class="form-error" id="loginError"></div>
+      <button class="btn-primary full-width" id="loginSubmit">Login</button>
+    </div>
+    <div class="auth-form hidden" id="signupForm">
+      <h3>Join IvoryFits</h3>
+      <input type="text" placeholder="Full Name" class="form-input" id="signupName" />
+      <input type="email" placeholder="Email" class="form-input" id="signupEmail" />
+      <input type="password" placeholder="Password" class="form-input" id="signupPassword" />
+      <div class="form-error" id="signupError"></div>
+      <button class="btn-primary full-width" id="signupSubmit">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ CHECKOUT ══════════════════ -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="checkout-modal">
+    <button class="close-btn" id="closeCheckout">✕</button>
+    <h3>Checkout</h3>
+    <div class="checkout-step active" id="step1">
+      <h4>Shipping Details</h4>
+      <input type="text" placeholder="Full Name" class="form-input" id="shipName"/>
+      <input type="email" placeholder="Email" class="form-input" id="shipEmail"/>
+      <input type="text" placeholder="Address" class="form-input" id="shipAddress"/>
+      <input type="text" placeholder="City, State, ZIP" class="form-input" id="shipCity"/>
+      <button class="btn-primary full-width" id="nextStep">Continue →</button>
+    </div>
+    <div class="checkout-step hidden" id="step2">
+      <h4>Order Summary</h4>
+      <div id="orderSummary"></div>
+      <div class="order-total-line"><span>Total</span><span id="orderTotal"></span></div>
+      <button class="btn-primary full-width" id="placeOrder">Place Order ◈</button>
+    </div>
+    <div class="checkout-step hidden" id="step3">
+      <div class="order-success">
+        <div class="success-icon">◈</div>
+        <h4>Order Confirmed!</h4>
+        <p>Your order has been placed successfully.</p>
+        <p class="order-num" id="orderNum"></p>
+        <button class="btn-primary" onclick="closeCheckout()">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ ADMIN ══════════════════ -->
+<div class="modal-overlay" id="adminModal">
+  <div class="admin-modal">
+    <button class="close-btn" id="closeAdmin">✕</button>
+    <h3>Admin Panel</h3>
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="products-admin">Products</button>
+      <button class="admin-tab" data-tab="orders-admin">Orders</button>
+    </div>
+    <div class="admin-content" id="products-admin"><button class="btn-primary" id="addProductBtn">+ Add Product</button><div id="adminProductsList"></div></div>
+    <div class="admin-content hidden" id="orders-admin"><div id="adminOrdersList"></div></div>
+  </div>
+</div>
+
+<!-- PRODUCT FORM -->
+<div class="modal-overlay" id="productFormModal">
+  <div class="auth-modal">
+    <button class="close-btn" id="closeProductForm">✕</button>
+    <h3 id="productFormTitle">Add Product</h3>
+    <input type="hidden" id="editProductId"/>
+    <input type="text" placeholder="Product Name" class="form-input" id="pName"/>
+    <input type="number" placeholder="Price" class="form-input" id="pPrice"/>
+    <select class="form-input sort-select" id="pGender">
+      <option value="women">Women</option>
+      <option value="men">Men</option>
+      <option value="kids">Kids</option>
+    </select>
+    <select class="form-input sort-select" id="pCategory">
+      <option value="T-Shirts & Tops">T-Shirts & Tops</option>
+      <option value="Shirts & Blouses">Shirts & Blouses</option>
+      <option value="Hoodies & Sweatshirts">Hoodies & Sweatshirts</option>
+      <option value="Jackets & Coats">Jackets & Coats</option>
+      <option value="Jeans">Jeans</option>
+      <option value="Trousers & Pants">Trousers & Pants</option>
+      <option value="Skirts">Skirts</option>
+      <option value="Shorts">Shorts</option>
+      <option value="Dresses">Dresses</option>
+      <option value="Co-ord Sets">Co-ord Sets</option>
+      <option value="Activewear">Activewear</option>
+      <option value="Ethnic Wear">Ethnic Wear</option>
+      <option value="Footwear">Footwear</option>
+      <option value="Accessories">Accessories</option>
+    </select>
+    <textarea placeholder="Description" class="form-input" id="pDesc" rows="3" style="resize:vertical"></textarea>
+    <input type="text" placeholder="Image URL (optional)" class="form-input" id="pImage"/>
+    <input type="number" placeholder="Stock Quantity" class="form-input" id="pStock"/>
+    <button class="btn-primary full-width" id="saveProduct">Save Product</button>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ══════════════════ CHATBOT ══════════════════ -->
+<button class="chat-fab" id="chatFab"><span class="chat-icon">✦</span><span class="chat-label">Style AI</span></button>
+<div class="chatbot-panel" id="chatbotPanel">
+  <div class="chatbot-header">
+    <div class="chatbot-avatar">✦</div>
+    <div><div class="chatbot-name">IvoryFits AI Stylist</div><div class="chatbot-status">● Online</div></div>
+    <button class="close-btn" id="closeChatbot">✕</button>
+  </div>
+  <div class="chatbot-messages" id="chatMessages">
+    <div class="chat-msg bot"><div class="msg-bubble">Hello! I'm your IvoryFits personal stylist. Ask me about Men, Women or Kids collections, sizing, or get outfit suggestions! ✨</div></div>
+  </div>
+  <div class="chatbot-input-area">
+    <input type="text" class="chatbot-input" id="chatInput" placeholder="Ask about styles..." />
+    <button class="chat-send" id="chatSend">→</button>
+  </div>
+</div>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand"><div class="brand-name" style="font-size:1.4rem;margin-bottom:0.5rem">◈ IVORYFITS</div><p>Luxury redefined. Fashion immortalized.</p></div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h5>Men</h5>
+        <a href="#" onclick="filterByGenderCat('men','T-Shirts')">T-Shirts</a>
+        <a href="#" onclick="filterByGenderCat('men','Jeans')">Jeans</a>
+        <a href="#" onclick="filterByGenderCat('men','Ethnic Wear')">Ethnic Wear</a>
+        <a href="#" onclick="filterByGenderCat('men','Accessories')">Accessories</a>
+      </div>
+      <div class="footer-col">
+        <h5>Women</h5>
+        <a href="#" onclick="filterByGenderCat('women','Dresses')">Dresses</a>
+        <a href="#" onclick="filterByGenderCat('women','Ethnic Wear')">Ethnic Wear</a>
+        <a href="#" onclick="filterByGenderCat('women','Activewear')">Activewear</a>
+        <a href="#" onclick="filterByGenderCat('women','Accessories')">Accessories</a>
+      </div>
+      <div class="footer-col">
+        <h5>Kids</h5>
+        <a href="#" onclick="filterByGenderCat('kids','T-Shirts & Tops')">T-Shirts & Tops</a>
+        <a href="#" onclick="filterByGenderCat('kids','Ethnic Wear')">Ethnic Wear</a>
+        <a href="#" onclick="filterByGenderCat('kids','Footwear')">Footwear</a>
+      </div>
+      <div class="footer-col">
+        <h5>Help</h5>
+        <a href="#">Sizing Guide</a><a href="#">Returns</a><a href="#">FAQ</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 IvoryFits. All rights reserved.</p><p>Crafted with ◈ for fashion.</p></div>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+(function() {
+  // ── Hide everything initially ──
+  const heroElements = document.querySelectorAll(
+    '.hero-eyebrow, .hero-title .line, .hero-sub, .hero-cta .btn-primary, .hero-cta .btn-ghost, .hero-scroll-indicator'
+  );
+  heroElements.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'none';
+  });
+  document.querySelectorAll('.model-card').forEach(c => {
+    c.style.opacity = '0';
+    c.style.transform = 'translateX(200px)';
+    c.style.transition = 'none';
+  });
+
+  const overlay = document.getElementById('introOverlay');
+  const logo    = document.getElementById('introLogo');
+  const sub     = document.getElementById('introSub');
+  const line    = document.getElementById('introLine');
+
+  // Step 1: Logo fades in
+  setTimeout(() => {
+    logo.style.opacity = '1';
+    logo.style.transform = 'translateY(0)';
+  }, 300);
+
+  // Step 2: Subtitle + line
+  setTimeout(() => {
+    sub.style.opacity = '1';
+    sub.style.transform = 'translateY(0)';
+    line.style.width = '120px';
+  }, 600);
+
+  // Step 3: Logo slides up
+  setTimeout(() => {
+    logo.style.transition = 'opacity 0.8s ease, transform 1s cubic-bezier(0.4,0,0.2,1)';
+    sub.style.transition   = 'opacity 0.5s ease, transform 0.8s ease';
+    line.style.transition  = 'width 0.5s ease, opacity 0.5s ease';
+    logo.style.transform   = 'translateY(-180px) scale(0.55)';
+    sub.style.opacity      = '0';
+    sub.style.transform    = 'translateY(-40px)';
+    line.style.opacity     = '0';
+  }, 1800);
+
+  // Step 4: Fade out overlay
+  setTimeout(() => {
+    overlay.style.transition = 'opacity 0.8s ease';
+    overlay.style.opacity    = '0';
+  }, 2600);
+
+  // Step 5: Remove overlay + animate hero cards
+  setTimeout(() => {
+    overlay.style.display = 'none';
+
+    // Cards slide in from right
+    document.querySelectorAll('.model-card').forEach((card, i) => {
+      card.style.transition = `opacity 0.8s ease ${i * 0.18}s, transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94) ${i * 0.18}s`;
+      card.style.opacity    = '1';
+      card.style.transform  = 'translateX(0)';
+    });
+
+    // Hero text + buttons fade up one by one
+    heroElements.forEach((el, i) => {
+      const delay = 0.15 + i * 0.12;
+      el.style.transition = `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s`;
+      el.style.opacity    = '1';
+      el.style.transform  = 'translateY(0)';
+    });
+
+  }, 3300);
+})();
+</script>
+<!-- ── USER PORTAL MODAL ── -->
+<div class="modal-overlay" id="userPortalModal">
+  <div style="background:var(--surface);border-radius:16px;width:90%;max-width:860px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
+    
+    <!-- Header -->
+    <div style="background:var(--bg);border-bottom:1px solid var(--border);padding:1.25rem 1.75rem;display:flex;align-items:center;gap:1rem;min-height:72px;box-sizing:border-box">
+      <div id="portalInitial" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#2a1f0a,#4a3520);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--gold);flex-shrink:0">A</div>
+      <div style="min-width:0;flex:1;overflow:hidden">
+        <div id="portalUserName" style="font-size:1rem;letter-spacing:0.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">User</div>
+        <div id="portalUserSub" style="font-size:0.72rem;color:var(--text3);margin-top:2px;letter-spacing:0.06em;text-transform:uppercase">Member</div>
+      </div>
+      <button onclick="closeUserPortal()" style="margin-left:8px;flex-shrink:0;background:var(--gold);border:none;color:#000;font-size:1.1rem;font-weight:700;cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div style="display:grid;grid-template-columns:190px 1fr;flex:1;overflow:hidden">
+      
+      <!-- Sidebar -->
+      <div style="background:var(--bg);border-right:1px solid var(--border2);padding:1.25rem 0;display:flex;flex-direction:column">
+        <div class="portal-nav-item active" onclick="showPortalSection('orders',this)">◈ My Orders</div>
+        <div class="portal-nav-item" onclick="showPortalSection('profile',this)">✦ Profile</div>
+        <div class="portal-nav-item" onclick="showPortalSection('wishlist',this)">♡ Wishlist</div>
+        <div class="portal-nav-item" onclick="showPortalSection('password',this)">⊙ Password</div>
+        <div class="portal-nav-item" onclick="portalSignOut()" style="margin-top:auto;color:#c0392b">→ Sign Out</div>
+      </div>
+
+      <!-- Content -->
+      <div style="overflow-y:auto;padding:1.75rem">
+
+        <!-- Orders -->
+        <div class="portal-section active" id="portal-orders">
+          <div style="font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border2)">Order History</div>
+          <div id="portal-orders-list"></div>
+        </div>
+
+        <!-- Profile -->
+        <div class="portal-section" id="portal-profile">
+          <div style="font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border2)">Account Details</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3)">Full Name</label>
+              <input id="portalName" type="text" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:6px;font-size:0.85rem;outline:none"/>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3)">Email</label>
+              <input id="portalEmail" type="email" disabled style="background:var(--surface);border:1px solid var(--border2);color:var(--text2);padding:10px 14px;border-radius:6px;font-size:0.85rem;outline:none;opacity:0.6"/>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3)">Phone</label>
+              <input id="portalPhone" type="text" placeholder="+91 00000 00000" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:6px;font-size:0.85rem;outline:none"/>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3)">City</label>
+              <input id="portalCity" type="text" placeholder="Hyderabad" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:6px;font-size:0.85rem;outline:none"/>
+            </div>
+          </div>
+          <button onclick="savePortalProfile()" style="background:var(--gold);color:#0a0a0a;border:none;padding:10px 28px;border-radius:6px;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer">Save Changes</button>
+        </div>
+
+        <!-- Wishlist -->
+        <div class="portal-section" id="portal-wishlist">
+          <div style="font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border2)">Saved Items</div>
+          <div id="portal-wishlist-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem"></div>
+        </div>
+
+        <!-- Password -->
+        <div class="portal-section" id="portal-password">
+          <div style="font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border2)">Change Password</div>
+          <div style="max-width:360px;display:flex;flex-direction:column;gap:1rem">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3)">Current Password</label>
+              <input type="password" placeholder="••••••••" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:6px;font-size:0.85rem;outline:none"/>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3)">New Password</label>
+              <input type="password" placeholder="••••••••" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:6px;font-size:0.85rem;outline:none"/>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3)">Confirm Password</label>
+              <input type="password" placeholder="••••••••" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:6px;font-size:0.85rem;outline:none"/>
+            </div>
+            <button onclick="showToast('Password updated ✦','◈')" style="background:var(--gold);color:#0a0a0a;border:none;padding:10px 28px;border-radius:6px;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;width:fit-content">Update Password</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
