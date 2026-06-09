@@ -261,3 +261,4 @@ export interface SocketEvents {
   'user:offline': { user_id: number };
   'notification:new': Notification;
 }
+
